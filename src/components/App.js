@@ -6,20 +6,21 @@ import {TOKEN_KEY} from "../constants"
 
 class App extends Component {
     state = {
-        isLoggedIn: Boolean(localStorage.getItem(TOKEN_KEY));
+        isLoggedIn: Boolean(localStorage.getItem(TOKEN_KEY))
     }
     handleLogin = (token) =>{ // all successful
         localStorage.setItem(TOKEN_KEY, token);
         this.setState({isLoggedIn: true });
     }
-  render() {
+  render(){
     return (
-      <div className="App">
-        <Header/>
-        <Main isLoggedIn = {this.state.isLoggedIn} handleLogin = {this.handleLogin}/>
-      </div>
-    );
-  }
+        <div className="App">
+            <Header/>
+            <Main isLoggedIn={this.state.isLoggedIn}
+                  handleLogin={this.handleLogin}/>
+        </div>
+        );
+    }
 }
 
 export default App;
