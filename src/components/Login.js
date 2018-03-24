@@ -2,7 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import { Form, Icon, Input, Button, message } from 'antd';
 import {API_ROOT} from "../constants"
-
+import { Link } from 'react-router-dom'
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {
@@ -19,7 +19,7 @@ class NormalLoginForm extends React.Component {
                         password: values.password,
                     }),
                 }).then((response) => {
-                    this.props.handleLogin(response);
+                    message.success()
                 }, (error) => {
                     message.error(error.responseText);
                 }).catch((error) => {
@@ -47,21 +47,15 @@ class NormalLoginForm extends React.Component {
                     )}
                 </FormItem>
                 <FormItem>
-                    {getFieldDecorator('remember', {
-                        valuePropName: 'checked',
-                        initialValue: true,
-                    })(
-                        <Checkbox>Remember me</Checkbox>
-                    )}
-                    <a className="login-form-forgot" href="">Forgot password</a>
+
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
-                    Or <a href="">register now!</a>
+                    Or <Link to ="/register">register now!</Link>
                 </FormItem>
             </Form>
         );
     }
 }
 
-export const Lgoin = Form.create()(NormalLoginForm);
+export const Login = Form.create()(NormalLoginForm);
