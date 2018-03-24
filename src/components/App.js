@@ -4,11 +4,17 @@ import {Main} from './Main';
 import '../styles/App.css';
 
 class App extends Component {
+    state = {
+        isLoggedIn: false,
+    }
+    handleLogin = (token) =>{ // all successful
+        this.setState({isLoggedIn: true });
+    }
   render() {
     return (
       <div className="App">
         <Header/>
-        <Main/>
+        <Main isLoggedIn = {this.state.isLoggedIn} handleLogin = {this.handleLogin}/>
       </div>
     );
   }
