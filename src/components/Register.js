@@ -1,5 +1,5 @@
 import React from 'react';
-import {From, Input, Button, message } from 'antd';
+import {Form, Input, Button, message } from 'antd';
 import $ from 'jquery';
 import {API_ROOT} from '../constants'
 

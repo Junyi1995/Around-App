@@ -1,8 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { Form, Icon, Input, Button, message } from 'antd';
-import { Link } from 'react-router-dom';
-import { API_ROOT } from '../constants';
+import {API_ROOT} from "../constants"
 
 const FormItem = Form.Item;
 
@@ -13,7 +12,7 @@ class NormalLoginForm extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 $.ajax({
-                    url: `${API_ROOT}/login`,
+                   url : `${API_ROOT}/login`,
                     method: 'POST',
                     data: JSON.stringify({
                         username: values.username,
@@ -48,14 +47,21 @@ class NormalLoginForm extends React.Component {
                     )}
                 </FormItem>
                 <FormItem>
+                    {getFieldDecorator('remember', {
+                        valuePropName: 'checked',
+                        initialValue: true,
+                    })(
+                        <Checkbox>Remember me</Checkbox>
+                    )}
+                    <a className="login-form-forgot" href="">Forgot password</a>
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
-                    Or <Link to="/register">register now!</Link>
+                    Or <a href="">register now!</a>
                 </FormItem>
             </Form>
         );
     }
 }
 
-export const Login = Form.create()(NormalLoginForm);
+export const Lgoin = Form.create()(NormalLoginForm);
