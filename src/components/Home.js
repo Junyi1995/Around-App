@@ -1,8 +1,9 @@
 import React from 'react';
-import {GEO_OPTIONS, API_ROOT,AUTH_PREFIX, TOKEN_KEY} from "../constants"
+import {GEO_OPTIONS, API_ROOT,AUTH_PREFIX, TOKEN_KEY, POS_KEY} from "../constants"
 import $ from 'jquery';
 import { Tabs, Button, Spin } from 'antd';
 import { Gallery } from './Gallery';
+import {CreatePostButton} from "./CreatePostButton"
 
 const TabPane = Tabs.TabPane;
 
@@ -14,33 +15,35 @@ export class Home extends React.Component{
         error : '',
         posts: [],
     }
+
+    componentDidMount(){
+        this.setState({loadingGeolocation: true, error: ''});
+        this.getGeoLocation();
+    }
     getGeoLocation = () =>{
         if('geolocation' in navigator){
             navigator.geolocation.getCurrentPosition(
                 this.onSuccessGetGeoLocation,
                 this.onFailedLoadGeoLocation, GEO_OPTIONS);
         } else {
-            /*geolocation IS NOT available */
+            this.setState({error: 'Your browser does not support geolocation!'});
         }
     }
 
     onSuccessGetGeoLocation = (position) => {
-        this.setState({loadingGeolocation: false});
+        this.setState({loadingGeolocation: false, error: ''});
         //const {latitude, longitude} = position.coords;
         console.log(position);
          const lat = 37.7915953;
          const lon = -122.3937977;
-        localStorage.setItem('POS_KEY', JSON.stringify({lat, lon}));
+        localStorage.setItem(POS_KEY, JSON.stringify({lat, lon}));
         this.loadNearbyPosts(position);
     }
     onFailedLoadGeoLocation = () => {
         this.setState({loadingGeolocation: false, error: 'Failed to load geolocation'});
-        console.log('Failed get geolocation')
+        console.log('Failed get geolocation');
     }
-    componentDidMount(){
-        this.setState({loadingGeolocation: true});
-        this.getGeoLocation();
-    }
+
 
     getGalleryPanelContent = () => {
         if(this.state.error){
@@ -68,7 +71,7 @@ export class Home extends React.Component{
     loadNearbyPosts = (position) => {
         const lat = 37.7915953;
         const lon = -122.3937977;
-        this.setState({loadingPosts : true});
+        this.setState({loadingPosts : true, error: ''});
         $.ajax({
             url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20` ,
             method: 'GET',
@@ -76,16 +79,17 @@ export class Home extends React.Component{
                 Authorization:`${AUTH_PREFIX} ${localStorage.getItem(TOKEN_KEY)}`
             },
         }).then((response) => {
-            this.setState({loadingPosts: false, error: ``});
+            this.setState({posts: response, loadingPosts: false, error:''});
             console.log(response);
         }, (response) => {
-            this.setState({loadingPosts: false, response: response.responseText})
+            this.setState({loadingPosts: false, response: response.responseText});
         }).catch((error) => {
             console.log(error);
         });
     }
     render() {
-        const operations = <Button type = "primary">Create New Post</Button>;
+        const operations = <CreatePostButton/>;
+
         return (
             <Tabs tabBarExtraContent={operations} className="main-tabs">
                 <TabPane tab="Posts" key="1">
