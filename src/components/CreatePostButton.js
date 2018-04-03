@@ -38,7 +38,7 @@ export class CreatePostButton extends React.Component {
                     dataType: 'text',
                 }).then(() => {
                     message.success('created a post successfully!');
-                    return this.props.loadNearbyPosts().then(() => {
+                    this.props.loadNearbyPosts().then(() => {
                         this.setState({
                             visible:false,
                             confirmLoading: false,
