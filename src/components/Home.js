@@ -72,7 +72,7 @@ export class Home extends React.Component{
         const lat = 37.7915953;
         const lon = -122.3937977;
         this.setState({loadingPosts : true, error: ''});
-        $.ajax({
+        return $.ajax({
             url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20` ,
             method: 'GET',
             headers: {
@@ -88,7 +88,7 @@ export class Home extends React.Component{
         });
     }
     render() {
-        const operations = <CreatePostButton/>;
+        const operations = <CreatePostButton loadNearbyPosts = {this.loadNearbyPosts}/>;
 
         return (
             <Tabs tabBarExtraContent={operations} className="main-tabs">
