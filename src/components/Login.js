@@ -3,6 +3,7 @@ import $ from 'jquery';
 import { Form, Icon, Input, Button, message } from 'antd';
 import {API_ROOT} from "../constants"
 import { Link } from 'react-router-dom'
+
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {

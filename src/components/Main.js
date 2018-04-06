@@ -19,7 +19,6 @@ export class Main extends React.Component {
         return (
             <div className="main">
                 <Switch>
-
                     <Route exact path="/" render = {this.getLogin}/>
                     <Route path="/register" component = {Register}/>
                     <Route path="/login" render = {this.getLogin}/>

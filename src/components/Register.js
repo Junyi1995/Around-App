@@ -99,7 +99,7 @@ class RegistrationForm extends React.Component{
                 >
                     {getFieldDecorator('password', {
                         rules: [{
-                            required: true, message: 'Please input your password!',
+                            required: true, message: 'Please input your password.',
                         }, {
                             validator: this.validateToNextPassword,
                         }],

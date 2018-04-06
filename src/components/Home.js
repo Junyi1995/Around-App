@@ -1,10 +1,10 @@
 import React from 'react';
-import {GEO_OPTIONS, API_ROOT,AUTH_PREFIX, TOKEN_KEY, POS_KEY} from "../constants"
+import {GEO_OPTIONS, API_ROOT,AUTH_PREFIX, TOKEN_KEY, POS_KEY} from "../constants";
 import $ from 'jquery';
-import { Tabs, Button, Spin } from 'antd';
+import { Tabs, Spin } from 'antd';
 import { Gallery } from './Gallery';
-import {CreatePostButton} from "./CreatePostButton"
-
+import { CreatePostButton } from "./CreatePostButton";
+import {WrappedAroundMap} from './AroundMap';
 const TabPane = Tabs.TabPane;
 
 
@@ -17,7 +17,7 @@ export class Home extends React.Component{
     }
 
     componentDidMount(){
-        this.setState({loadingGeolocation: true, error: ''});
+        this.setState({ loadingGeolocation: true, error: ''});
         this.getGeoLocation();
     }
     getGeoLocation = () =>{
@@ -37,21 +37,21 @@ export class Home extends React.Component{
          const lat = 37.7915953;
          const lon = -122.3937977;
         localStorage.setItem(POS_KEY, JSON.stringify({lat, lon}));
-        this.loadNearbyPosts(position);
+        this.loadNearbyPosts();
     }
     onFailedLoadGeoLocation = () => {
-        this.setState({loadingGeolocation: false, error: 'Failed to load geolocation'});
-        console.log('Failed get geolocation');
+        this.setState({loadingGeolocation: false, error: 'Failed to load geolocation. '});
+        //console.log('Failed get geolocation');
     }
 
 
     getGalleryPanelContent = () => {
         if(this.state.error){
             return <div>{this.state.error}</div>;
-        } else if(this.state.loadingGeolocation){
-            return <Spin tip = 'loading geolocation...'/> ;
+        } else if (this.state.loadingGeolocation) {
+            return <Spin tip = 'Loading geolocation...'/> ;
         } else if (this.state.loadingPosts){
-            return <Spin tip = 'loading posts...'/>;
+            return <Spin tip = 'Loading posts...'/>;
         } else if(this.state.posts && this.state.posts.length > 0){
             const images = this.state.posts.map((post) => {
                 return {
@@ -68,7 +68,8 @@ export class Home extends React.Component{
             return null;
         }
     }
-    loadNearbyPosts = (position) => {
+    loadNearbyPosts = () => {
+        // const {lat, lon} = JSON.parse(localStorage.getItem(POS_KEY));
         const lat = 37.7915953;
         const lon = -122.3937977;
         this.setState({loadingPosts : true, error: ''});
@@ -82,20 +83,27 @@ export class Home extends React.Component{
             this.setState({posts: response, loadingPosts: false, error:''});
             console.log(response);
         }, (response) => {
-            this.setState({loadingPosts: false, response: response.responseText});
+            this.setState({loadingPosts: false, response: response.responseText });
         }).catch((error) => {
             console.log(error);
         });
     }
     render() {
-        const operations = <CreatePostButton loadNearbyPosts = {this.loadNearbyPosts}/>;
+        const createPostButton = <CreatePostButton loadNearbyPosts = {this.loadNearbyPosts}/>;
 
         return (
-            <Tabs tabBarExtraContent={operations} className="main-tabs">
+            <Tabs tabBarExtraContent={createPostButton} className="main-tabs">
                 <TabPane tab="Posts" key="1">
                     {this.getGalleryPanelContent()}
                 </TabPane>
-                <TabPane tab="Map" key="2">Content of tab 2</TabPane>
+                <TabPane tab="Map" key="2">
+                    <WrappedAroundMap
+                        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
+                        loadingElement={<div style={{ height: `100%` }} />}
+                        containerElement={<div style={{ height: `400px` }} />}
+                        mapElement={<div style={{ height: `100%` }} />}
+                    />
+                </TabPane>
             </Tabs>
         );
     }
