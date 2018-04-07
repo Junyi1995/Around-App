@@ -37,7 +37,7 @@ export class Home extends React.Component{
          const lat = 37.7915953;
          const lon = -122.3937977;
         localStorage.setItem(POS_KEY, JSON.stringify({lat, lon}));
-        this.loadNearbyPosts();
+        this.loadNearbyPosts(position);
     }
     onFailedLoadGeoLocation = () => {
         this.setState({loadingGeolocation: false, error: 'Failed to load geolocation. '});
