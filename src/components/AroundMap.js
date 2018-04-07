@@ -1,29 +1,21 @@
 import React from 'react';
 import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow} from 'react-google-maps';
-
+import {AroundMarker} from './AroundMarker';
 class AroundMap extends React.Component{
-    state = {
-        isOpen: false,
-    }
-    onToggleOpen = () => {
-        this.setState((prevState) => {
-            return {isOpen: !prevState.isOpen};
-        });
-    }
     render() {
+        const arrPos = [
+            {lat: 40.740, lng: -74.18},
+            {lat: 42.740, lng: -74.18},
+            {lat: 44.740, lng: -74.18},
+        ];
         return (
             <GoogleMap
-                defaultZoom={12}
+                defaultZoom={5}
                 defaultCenter={{lat: 40.740, lng: -74.18}}
             >
-                <Marker
-                    position={{lat: 40.740, lng: -74.18}}
-                    onClick = {this.onToggleOpen}
-                >
-                    {this.state.isOpen? <InfoWindow onCloseClick={this.onToggleOpen}>
-                        <div> abc </div>
-                        </InfoWindow> : null }
-                </Marker>
+                {arrPos.map((pos) => {
+                    return <AroundMarker key = {`${pos.lat}${pos.lng}`} pos = {pos}/>
+                })}
             </GoogleMap>
         );
     }
